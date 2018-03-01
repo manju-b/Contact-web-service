@@ -3,9 +3,15 @@ package com.example.demo;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
 
 
 @Entity
+@Table(name="contact", 
+	uniqueConstraints=@UniqueConstraint(columnNames={"phoneNumber"}, name ="UNIQUE_PHONE")
+	)
 public class Contact {
 	
 	@Id
@@ -70,6 +76,13 @@ public class Contact {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
+	
+	public void validate() throws IllegalArgumentException {
+		if((firstName == null || firstName.isEmpty()) || (phoneNumber == null || phoneNumber.isEmpty())) {
+			throw new IllegalArgumentException("Contact will not be saved with out firstname and phonenumber");
+		} 
+	}
+	
 	
 	public String toString() {
 		return "firstName: " + firstName + "/tlastName: " + lastName + "/tEmail-id: " + emailId + "/tphoneNumber: " + phoneNumber;
