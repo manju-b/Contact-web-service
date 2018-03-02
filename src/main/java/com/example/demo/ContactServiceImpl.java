@@ -11,9 +11,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class ContactServiceImpl implements ContactService {
 
-	@Autowired
 	ContactRepository contactRepository;
 	
+	@Autowired
+	public ContactServiceImpl(ContactRepository contactRepository) {
+		super();
+		this.contactRepository = contactRepository;
+	}
+
 	@Override
 	public Contact getContactById(Long id) {
 		return contactRepository.findOne(id);
@@ -48,7 +53,8 @@ public class ContactServiceImpl implements ContactService {
 	
 	@Override
 	public void deleteContact(Long id) {
-		contactRepository.delete(contactRepository.findOne(id));
+		Contact ct = contactRepository.findOne(id);
+		contactRepository.delete(ct);
 	}
 
 	@Override
