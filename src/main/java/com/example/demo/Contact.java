@@ -83,9 +83,10 @@ public class Contact {
 		} 
 	}
 	
-	
+	@Override
 	public String toString() {
-		return "firstName: " + firstName + "/tlastName: " + lastName + "/tEmail-id: " + emailId + "/tphoneNumber: " + phoneNumber;
+		return "Contact [Id=" + Id + ", firstName=" + firstName + ", lastName=" + lastName + ", emailId=" + emailId
+				+ ", phoneNumber=" + phoneNumber + "]";
 	}
 	
 }

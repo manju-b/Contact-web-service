@@ -59,7 +59,7 @@ public class ContactServiceImpl implements ContactService {
 
 	@Override
 	public Contact addContact(Contact contact) throws IllegalArgumentException {
-		if(contact.getPhoneNumber().length() != 10) {
+		if(contact.getPhoneNumber().length() != 10 && contact.getPhoneNumber().matches("^[0-9]*$")) {
 			throw new IllegalArgumentException("Please enter a 10 digit phonenumber");
 		}
 		Contact newContact = null;
@@ -76,7 +76,7 @@ public class ContactServiceImpl implements ContactService {
 	@Override
 	public Contact updateContact(Long id, Contact contact) {
 		contact.setId(id);
-		if(contact.getPhoneNumber().length() != 10) {
+		if(contact.getPhoneNumber().length() != 10 && contact.getPhoneNumber().matches("^[0-9]*$")) {
 			throw new IllegalArgumentException("Please enter a 10 digit phonenumber");
 		}
 		try {
@@ -91,7 +91,7 @@ public class ContactServiceImpl implements ContactService {
 	private void handleDataIntegrityViolationException(DataIntegrityViolationException e) {
 		Throwable exception = e.getCause();
 		if(exception instanceof ConstraintViolationException ) {
-			ConstraintViolationException c = (ConstraintViolationException)e.getCause();
+			ConstraintViolationException c = (ConstraintViolationException)exception;
 			if(c.getConstraintName().startsWith("\"UNIQUE_PHONE")) {
 				throw new IllegalArgumentException("The phone number provided is already associated with another contact");
 			}
