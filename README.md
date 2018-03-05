@@ -5,7 +5,9 @@ Backend implementation for contacts application, which lets you create, read, re
 # Instructions
 
 Clone the repo
+
 ``` git clone git@github.com:manju-b/Contact-web-service.git ```
 
 Run the service
+
 ``` mvn spring-boot:run ```
