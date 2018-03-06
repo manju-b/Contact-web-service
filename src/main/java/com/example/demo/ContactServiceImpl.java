@@ -53,13 +53,17 @@ public class ContactServiceImpl implements ContactService {
 	
 	@Override
 	public void deleteContact(Long id) {
-		Contact ct = contactRepository.findOne(id);
-		contactRepository.delete(ct);
+		if(contactRepository.exists(id)) {
+			Contact ct = contactRepository.findOne(id);
+			contactRepository.delete(ct);
+		}else {
+			throw new IllegalArgumentException("Record you are trying to delete does not exist in database");
+		}
 	}
 
 	@Override
 	public Contact addContact(Contact contact) throws IllegalArgumentException {
-		if(contact.getPhoneNumber().length() != 10 && contact.getPhoneNumber().matches("^[0-9]*$")) {
+		if(!(contact.getPhoneNumber().matches("^[0-9]*$")) || contact.getPhoneNumber().length() != 10) {
 			throw new IllegalArgumentException("Please enter a 10 digit phonenumber");
 		}
 		Contact newContact = null;
@@ -69,14 +73,13 @@ public class ContactServiceImpl implements ContactService {
 			handleDataIntegrityViolationException(e);
 			throw e;
 		}
-		
 		return newContact;
 	}
 
 	@Override
 	public Contact updateContact(Long id, Contact contact) {
 		contact.setId(id);
-		if(contact.getPhoneNumber().length() != 10 && contact.getPhoneNumber().matches("^[0-9]*$")) {
+		if(!(contact.getPhoneNumber().matches("^[0-9]*$")) || contact.getPhoneNumber().length() != 10) {
 			throw new IllegalArgumentException("Please enter a 10 digit phonenumber");
 		}
 		try {

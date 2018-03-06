@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -63,11 +64,28 @@ public class ContactServiceImplTest {
 		Contact ct3 = new Contact("john", "smith", "hotmail.com", "9999999999");
 		ct3.setId(3);
 		Long l = 2L;
+		when(mockContactRepository.exists(l)).thenReturn(true);
 		when(mockContactRepository.findOne(l)).thenReturn(ct3);
 		service.deleteContact(l);
 		verify(mockContactRepository, times(1)).delete(ct3);
 		verify(mockContactRepository, times(1)).findOne(l);
+		verify(mockContactRepository, times(1)).exists(l);
 
+	}
+	
+	@Test
+	public void testDeleteContactWhen_ExceptionIsThrown() {
+		Contact ct3 = new Contact("jack", "Rob", "hotmail.com", "5472648336");
+		ct3.setId(9);
+		Long l = 9L;
+		when(mockContactRepository.exists(l)).thenReturn(false);
+		try {
+			service.deleteContact(l);
+		} catch(IllegalArgumentException e) {
+			Assert.assertEquals("Record you are trying to delete does not exist in database", e.getMessage());
+		}
+		verify(mockContactRepository, never()).delete(ct3);
+		verify(mockContactRepository, never()).findOne(l);
 	}
 	
 	@Test
